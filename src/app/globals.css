@@ -1,26 +1,262 @@
 @import "tailwindcss";
+@import "@heroui/styles";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
+/* ------------------------------------------------------------------ */
+/*  Merry Mail design tokens                                          */
+/* ------------------------------------------------------------------ */
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
+@theme {
+  --font-sans: var(--font-jakarta), ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-fraunces), ui-serif, Georgia, serif;
+  --font-script: var(--font-vibes), "Brush Script MT", cursive;
+  --font-hand: var(--font-caveat), "Comic Sans MS", cursive;
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+  --color-evergreen-50: #f2f8f5;
+  --color-evergreen-100: #e3f1ea;
+  --color-evergreen-200: #bfe0d2;
+  --color-evergreen-300: #86c0aa;
+  --color-evergreen-400: #4f9d82;
+  --color-evergreen-500: #2b7f64;
+  --color-evergreen-600: #1c6650;
+  --color-evergreen-700: #145040;
+  --color-evergreen-800: #0e3b2e;
+  --color-evergreen-900: #0b2f24;
+  --color-evergreen-950: #06221a;
+
+  --color-cranberry-50: #fdf2f1;
+  --color-cranberry-100: #fae3e2;
+  --color-cranberry-200: #f4c3c3;
+  --color-cranberry-300: #ea9192;
+  --color-cranberry-400: #db5d60;
+  --color-cranberry-500: #c8373d;
+  --color-cranberry-600: #b3262e;
+  --color-cranberry-700: #9b1c24;
+  --color-cranberry-800: #7d151d;
+  --color-cranberry-900: #5f1016;
+
+  --color-gold-100: #f9f3e4;
+  --color-gold-200: #f2e7cb;
+  --color-gold-300: #e8d4a2;
+  --color-gold-400: #d9bb72;
+  --color-gold-500: #c9a24a;
+  --color-gold-600: #a8842f;
+  --color-gold-700: #8a6a22;
+
+  --color-cream-50: #fffdf8;
+  --color-cream-100: #fbf6ec;
+  --color-cream-200: #f5ecdb;
+  --color-cream-300: #ece0c7;
+
+  --color-ink-900: #1d1a17;
+  --color-ink-700: #3b352f;
+  --color-ink-500: #6b6259;
+  --color-ink-400: #8d847a;
+
+  --animate-float: float 6s ease-in-out infinite;
+  --animate-rise: rise 0.8s cubic-bezier(0.22, 1, 0.36, 1) both;
+  --animate-shine: shine 3.2s ease-in-out infinite;
+
+  @keyframes float {
+    0%,
+    100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-10px);
+    }
+  }
+  @keyframes rise {
+    from {
+      opacity: 0;
+      transform: translateY(18px);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+  @keyframes shine {
+    0% {
+      background-position: 200% 0;
+    }
+    100% {
+      background-position: -200% 0;
+    }
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+/* HeroUI theme overrides (unlayered so they win over the theme layer) */
+:root,
+.light,
+[data-theme="light"] {
+  --radius: 0.75rem;
+  --background: #fbf6ec;
+  --foreground: #1d1a17;
+  --surface: #fffdf8;
+  --surface-foreground: #1d1a17;
+  --surface-secondary: #f7f0e2;
+  --surface-tertiary: #f1e7d4;
+  --overlay: #fffdf8;
+  --overlay-foreground: #1d1a17;
+  --muted: #6b6259;
+  --default: #f1e8d8;
+  --default-foreground: #1d1a17;
+  --accent: #b3262e;
+  --accent-foreground: #fffdf8;
+  --success: #1c6650;
+  --success-foreground: #ffffff;
+  --warning: #c9a24a;
+  --warning-foreground: #1d1a17;
+  --field-background: #fffdf8;
+  --field-foreground: #1d1a17;
+  --field-placeholder: #8d847a;
+  --field-border: #e3d6bf;
+  --field-border-width: 1px;
+  --border: #e8dcc6;
+  --separator: #ece2cf;
+  --focus: #b3262e;
+  --link: #b3262e;
+  --segment: #fffdf8;
+  --surface-shadow:
+    0 1px 2px rgba(60, 40, 20, 0.05), 0 4px 16px rgba(60, 40, 20, 0.05);
+  --overlay-shadow:
+    0 10px 40px rgba(40, 25, 10, 0.16), 0 2px 8px rgba(40, 25, 10, 0.08);
+  --field-shadow: 0 1px 2px rgba(60, 40, 20, 0.04);
+}
+
+/* ------------------------------------------------------------------ */
+/*  Base                                                              */
+/* ------------------------------------------------------------------ */
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    -webkit-tap-highlight-color: transparent;
+  }
+  body {
+    @apply bg-background text-foreground font-sans antialiased;
+    text-rendering: optimizeLegibility;
+  }
+  h1,
+  h2,
+  h3,
+  h4 {
+    @apply font-display tracking-tight;
+    font-optical-sizing: auto;
+    text-wrap: balance;
+  }
+  p {
+    text-wrap: pretty;
+  }
+  ::selection {
+    background: color-mix(
+      in oklab,
+      var(--color-cranberry-600) 22%,
+      transparent
+    );
+  }
+  [id] {
+    scroll-margin-top: 7rem;
+  }
+}
+
+/* ------------------------------------------------------------------ */
+/*  Utilities                                                         */
+/* ------------------------------------------------------------------ */
+
+@utility container-site {
+  width: 100%;
+  max-width: 80rem;
+  margin-inline: auto;
+  padding-inline: 1rem;
+  @media (width >= 40rem) {
+    padding-inline: 1.5rem;
+  }
+  @media (width >= 64rem) {
+    padding-inline: 2rem;
+  }
+}
+
+/* Fine paper grain, used on surfaces and on printed cards */
+@utility paper-grain {
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0.35 0 0 0 0 0.27 0 0 0 0 0.18 0 0 0 .09 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+}
+
+@utility bg-festive-dots {
+  background-image: radial-gradient(
+    color-mix(in oklab, var(--color-gold-500) 35%, transparent) 1px,
+    transparent 1.5px
+  );
+  background-size: 22px 22px;
+}
+
+@utility text-shine {
+  background: linear-gradient(
+    110deg,
+    var(--color-gold-600) 0%,
+    var(--color-gold-400) 35%,
+    #fff6db 50%,
+    var(--color-gold-400) 65%,
+    var(--color-gold-600) 100%
+  );
+  background-size: 200% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+@utility no-scrollbar {
+  scrollbar-width: none;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+/* ------------------------------------------------------------------ */
+/*  Components                                                        */
+/* ------------------------------------------------------------------ */
+
+@layer components {
+  .button {
+    @apply font-semibold;
+  }
+  .eyebrow {
+    @apply inline-flex items-center gap-2 text-xs font-semibold tracking-[0.18em] text-cranberry-700 uppercase;
+  }
+  .section-title {
+    @apply font-display text-3xl leading-[1.08] font-semibold text-ink-900 sm:text-4xl lg:text-5xl;
+  }
+  .section-lead {
+    @apply text-base leading-relaxed text-ink-500 sm:text-lg;
+  }
+  .prose-mm {
+    @apply max-w-none text-ink-700;
+  }
+  .prose-mm h2 {
+    @apply mt-10 mb-3 text-2xl font-semibold text-ink-900;
+  }
+  .prose-mm h3 {
+    @apply mt-6 mb-2 text-lg font-semibold text-ink-900;
+  }
+  .prose-mm p,
+  .prose-mm li {
+    @apply leading-relaxed;
+  }
+  .prose-mm p {
+    @apply mb-4;
+  }
+  .prose-mm ul {
+    @apply mb-4 list-disc space-y-1 pl-6;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
 }
